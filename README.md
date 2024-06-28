@@ -1,6 +1,6 @@
 # MCAP CMake Builder
 
-This repo provide a wrapper to build and install [MCAP](https://github.com/foxglove/mcap) via CMake.
+This repo provides a wrapper to build and install [MCAP](https://github.com/foxglove/mcap) via CMake.
 
 ## Build
 
@@ -10,7 +10,7 @@ $ cd mcap_build
 $ mkdir build && cd build
 $ cmake ../ && make install
 ```
-you can change the install folder by setting `CMAKE_INSTALL_PREFIX` (as for any CMake project). 
+you can change the install folder by setting `CMAKE_INSTALL_PREFIX` (as for any CMake project).
 
 ## Usage
 ### MCAP Is Installed
@@ -40,11 +40,16 @@ target_link_libraries(<target> PUBLIC mcap)
 
 ### Macros
 * Do not add `MCAP_IMPLEMENTATION` macro, as that is handled for you by this wrapper.
-* This Cmake wrapper automatically detect if `LZ4` and `zstd` are available, and
+* This Cmake wrapper automatically detects if `LZ4` and `zstd` are available, and
   * if present, links them to the `mcap` library
   * if they are not present automatically define `MCAP_COMPRESSION_NO_LZ4` and `MCAP_COMPRESSION_NO_ZSTD` 
 
+## Notes
+MCAP is natively a header-only library, but in this wrapper, it is built into a binary library. 
 
+This has two benefits:
+* it allows to improve the compilation time of your project
+* simplify its usage, by removing the need to specify any macros (see the section above).
 
 
 
