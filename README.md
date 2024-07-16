@@ -2,11 +2,11 @@
 
 This repo provides a wrapper to build and install [MCAP](https://github.com/foxglove/mcap) via CMake.
 
-## Build
+## Build and Install
 
 To build and install run:
 ```bash
-$ cd mcap_build
+$ cd mcap_builder
 $ mkdir build && cd build
 $ cmake ../ && make install
 ```
@@ -14,7 +14,7 @@ you can change the install folder by setting `CMAKE_INSTALL_PREFIX` (as for any 
 
 ## Usage
 ### MCAP Is Installed
-To include MCAP in your library first you need to add it to your CMake:
+If you built and installed as described above, to include MCAP in your library first you need to add it to your CMake:
 ```cmake
 find_package(mcap)
 
