@@ -52,5 +52,7 @@ This has two benefits:
 * it allows to improve the compilation time of your project
 * simplify its usage, by removing the need to specify any macros (see the section above).
 
+The CMake option `MCAP_BUILDER_BUILD_SHARED_LIB` can be used to control the library type:
 
-
+* If enabled (default), the library type will be `SHARED`
+* If disabled, the library will depend on the value of the `BUILD_SHARED_LIBS` variable

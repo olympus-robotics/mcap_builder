@@ -1,4 +1,10 @@
-add_library(mcap SHARED lib.cpp)
+option(MCAP_BUILDER_BUILD_SHARED_LIB "force building MCAP library as shared library" ON)
+
+if (MCAP_BUILDER_BUILD_SHARED_LIB)
+  add_library(mcap SHARED lib.cpp)
+else()
+  add_library(mcap lib.cpp)
+endif()
 
 target_include_directories(mcap PUBLIC
   $<BUILD_INTERFACE:${MCAP_INCLUDE_DIR}>
