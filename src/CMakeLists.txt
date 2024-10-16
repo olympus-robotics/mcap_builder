@@ -7,8 +7,8 @@ target_include_directories(mcap PUBLIC
 
 set(DEPENDENCIES "")
 
-find_package(lz4)
-if (${lz4_FOUND} QUIET)
+find_package(lz4 QUIET)
+if (${lz4_FOUND})
   message(STATUS "Found lz4 from ${lz4_DIR}")
   list(APPEND DEPENDENCIES LZ4::lz4)
 else()
@@ -16,8 +16,8 @@ else()
   target_compile_definitions(mcap PUBLIC "MCAP_COMPRESSION_NO_LZ4")
 endif()
 
-find_package(zstd)
-if (${zstd_FOUND} QUIET)
+find_package(zstd QUIET)
+if (${zstd_FOUND})
   message(STATUS "Found zstd from ${zstd_DIR}")
   list(APPEND DEPENDENCIES zstd::libzstd)
 else()
