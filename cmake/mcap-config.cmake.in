@@ -1,7 +1,67 @@
 # =================================================================================================
-#  Copyright (C) 2023-2024 MCAP_BUILDER Contributors
+#  Copyright (C) 2023-2025 MCAP_BUILDER Contributors
 # =================================================================================================
+# FILE: mcap_builder  cmake/mcap-config.cmake.in
 
+### Calls `PACKAGE_INIT` macro to initialize the mcap package configuration.
+### Sets up standard variables that help in determining the package's 
+### installation prefix, related paths and compatibility checks
 @PACKAGE_INIT@
 
-include ( "${CMAKE_CURRENT_LIST_DIR}/mcap-targets.cmake" )
+include(CMakeFindDependencyMacro)
+
+# Handle lz4 dependency
+if(@MCAP_LZ4_FOUND@)
+  if(NOT @MCAP_LZ4_VIA_PKGCONFIG@)
+    find_dependency(lz4 QUIET)
+  endif()
+  if(NOT lz4_FOUND AND @MCAP_LZ4_VIA_PKGCONFIG@)
+    find_package(PkgConfig QUIET)
+    if(PkgConfig_FOUND)
+      pkg_check_modules(LZ4 QUIET liblz4)
+      if(LZ4_FOUND)
+        # Create an imported target for lz4 if found via pkg-config
+        if(NOT TARGET LZ4::lz4)
+          add_library(LZ4::lz4 INTERFACE IMPORTED)
+          set_target_properties(LZ4::lz4 PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${LZ4_INCLUDE_DIRS}"
+            INTERFACE_LINK_LIBRARIES "${LZ4_LINK_LIBRARIES}"
+          )
+        endif()
+      else()
+        message(WARNING "lz4 not found via pkg-config in downstream project")
+      endif()
+    else()
+      message(WARNING "lz4 not found and pkg-config unavailable in downstream project")
+    endif()
+  endif()
+endif()
+
+# Handle zstd dependency
+if(@MCAP_ZSTD_FOUND@)
+  if(NOT @MCAP_ZSTD_VIA_PKGCONFIG@)
+    find_dependency(zstd QUIET)
+  endif()
+  if(NOT zstd_FOUND AND @MCAP_ZSTD_VIA_PKGCONFIG@)
+    find_package(PkgConfig QUIET)
+    if(PkgConfig_FOUND)
+      pkg_check_modules(ZSTD QUIET libzstd)
+      if(ZSTD_FOUND)
+        # Create an imported target for zstd if found via pkg-config
+        if(NOT TARGET zstd::libzstd)
+          add_library(zstd::libzstd INTERFACE IMPORTED)
+          set_target_properties(zstd::libzstd PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${ZSTD_INCLUDE_DIRS}"
+            INTERFACE_LINK_LIBRARIES "${ZSTD_LINK_LIBRARIES}"
+          )
+        endif()
+      else()
+        message(WARNING "zstd not found via pkg-config in downstream project")
+      endif()
+    else()
+      message(WARNING "zstd not found and pkg-config unavailable in downstream project")
+    endif()
+  endif()
+endif()
+
+include("${CMAKE_CURRENT_LIST_DIR}/mcap-targets.cmake")
